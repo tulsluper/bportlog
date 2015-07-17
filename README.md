@@ -4,7 +4,9 @@ Brocade portlogdump analysis
 
 Clone the repo or download the latest release and unpack to bportlog.
 
-Install requirements `sudo pip install -r requirements.txt`
+Install python-dev and python-pip on system.
+
+Install requirements `sudo pip install -r requirements.txt`.
 
     
 ### Configure bportlog
