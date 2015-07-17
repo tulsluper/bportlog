@@ -1,6 +1,6 @@
 # bportlog
 Brocade portlogdump analysis
-
+<br><br>
 
 
 Clone the repo or download the latest release and unpack to bportlog.
@@ -14,20 +14,22 @@ Add switches to CONNECTIONS in conf.py
 
 ```python
 CONNECTIONS = [
-    ['sw1', '192.168.56.101', 'user', 'password'],   
-    ['sw2', '192.168.56.102', 'user', 'password'],
+    ['dcx1', '192.168.56.101', 'user', 'password'],   
+    ['dcx2', '192.168.56.102', 'user', 'password'],
 ]
 ```
 
 ### Collect logs
 
 `./collect.py`
-run with -h help
+
+run with -h for help
 
 ### Explore logs
 
 `./explore.py`
-run with -h help
+
+run with -h for help
 
 ### Examples
 
