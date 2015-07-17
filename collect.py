@@ -72,7 +72,7 @@ def prepare(lines, lastline, dtnow):
         else:
            time = datetime.strptime(line[:12], '%H:%M:%S.%f').time()
            dt = datetime.combine(date, time)
-           if dtmin < dt < dtnow:
+           if lastline or dtmin < dt < dtnow:
                newline = '{} {}'.format(dt.isoformat()[:19], line[13:])
                newlines.append(newline)
     try:
