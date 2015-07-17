@@ -1,6 +1,7 @@
 # bportlog
 Brocade portlogdump analysis
-------
+
+
 
 Clone the repo or download the latest release and unpack to bportlog.
 
@@ -20,13 +21,28 @@ CONNECTIONS = [
 
 ### Collect logs
 
-`./collect.py -h`
+`./collect.py`
+run with -h help
 
 ### Explore logs
 
-`./explore.py -h`
+`./explore.py`
+run with -h help
 
 ### Examples
+
+`./collect.py -h`
+```
+usage: collect.py [-h] [-r R] [-i I]
+
+Brocade portlogdump analysis
+Collect data
+
+optional arguments:
+  -h, --help  show this help message and exit
+  -r R        repeat R times (default: 1)
+  -i I        set I seconds interval between repeats (default:300)
+```
 
 ~/bportlog$ `./collect.py -r 3 -i 300`
 ```
@@ -43,12 +59,29 @@ Data save finished: 2/2
 Duration: 16
 ```
 
+`./explore.py -h`
+```
+usage: explore.py [-h] [-p parser] [-s system [system ...]]
+
+Brocade portlogdump analysis
+Explore data
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -p parser             execute parser function:
+                        stat - records base statistic
+                        task - records percentage for each task event
+                        port - records percentage for for each port
+                        (default: stat)
+  -s system [system ...]
+                        execute for specified system(s) or all
+```
 
 ~/bportlog$ `./explore.py -p stat`
 ```
                  lines      duration     from                     till
 dcx1             12568      0:15:00      2015-07-17 11:18:00      2015-07-17 11:33:00
-dcx2             12264      0:14:53      2015-07-17 11:18:07      2015-07-17 11:33:00    
+dcx2             12264      0:14:53      2015-07-17 11:18:07      2015-07-17 11:33:00
 ```
 
 ~/bportlog$ `./explore.py -p task`
