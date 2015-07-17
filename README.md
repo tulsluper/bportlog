@@ -1,4 +1,6 @@
-### Prepare system
+# bportlog
+Brocade portlogdump analysis
+------
 
 Clone the repo or download the latest release and unpack to bportlog.
 
@@ -17,11 +19,12 @@ CONNECTIONS = [
 ```
 
 ### Collect logs
-For help run: `./collect.py -h`
+
+`./collect.py -h`
 
 ### Explore logs
 
-For help run: `./explore.py -h`
+`./explore.py -h`
 
 ### Examples
 
@@ -43,7 +46,8 @@ Duration: 16
 
 ~/bportlog$ `./explore.py -p stat`
 ```
-                 lines      duration     from                     till                     dcx1             12568      0:15:00      2015-07-17 11:18:00      2015-07-17 11:33:00
+                 lines      duration     from                     till
+dcx1             12568      0:15:00      2015-07-17 11:18:00      2015-07-17 11:33:00
 dcx2             12264      0:14:53      2015-07-17 11:18:07      2015-07-17 11:33:00    
 ```
 
