@@ -47,15 +47,15 @@ def task(logs):
     for keyspart in itemstoparts(keys, 12):
         
         sys.stderr.write('\n')
-        sys.stderr.write('{} {}\n'.format(' '*12, ''.join(['{:>6}'.format(n.split()[0]) for n in keyspart])))
-        sys.stderr.write('{} {}\n'.format(' '*12, ''.join(['{:>6}'.format(n.split()[1]) for n in keyspart])))
+        sys.stderr.write('{0} {1}\n'.format(' '*12, ''.join(['{0:>6}'.format(n.split()[0]) for n in keyspart])))
+        sys.stderr.write('{0} {1}\n'.format(' '*12, ''.join(['{0:>6}'.format(n.split()[1]) for n in keyspart])))
 
         for system in systems:
             items = []
             for key in keyspart:
                 num = allnums[system].get(key, '')
                 items.append(num)
-            sys.stderr.write('{:<12} {}\n'.format(system, ''.join(['{:>6}'.format(i) for i in items])))
+            sys.stderr.write('{0:<12} {1}\n'.format(system, ''.join(['{0:>6}'.format(i) for i in items])))
         sys.stderr.write('')
     sys.stderr.write('\n')
 
@@ -92,7 +92,7 @@ def port(logs):
 
         sys.stderr.write('\n')
         for numspart in itemstoparts(nums, 8):
-            sys.stderr.write('{:<14} {}\n'.format(system, '  '. join(['{:>3}:{:>3}'.format(p, v) for p, v in numspart])))
+            sys.stderr.write('{0:<14} {1}\n'.format(system, '  '. join(['{0:>3}:{1:>3}'.format(p, v) for p, v in numspart])))
     sys.stderr.write('\n')
 
 #===============================================================================

@@ -73,7 +73,7 @@ def prepare(lines, lastline, dtnow):
            time = datetime.strptime(line[:12], '%H:%M:%S.%f').time()
            dt = datetime.combine(date, time)
            if lastline or dtmin < dt < dtnow:
-               newline = '{} {}'.format(dt.isoformat()[:19], line[13:])
+               newline = '{0} {1}'.format(dt.isoformat()[:19], line[13:])
                newlines.append(newline)
     try:
         if lastline != newlines[-1]:
@@ -136,7 +136,7 @@ def run():
         json.dump(lastlines, f)
 
     duration = int(time() - starttime)
-    sys.stdout.write('Duration: {}\n'.format(duration))
+    sys.stdout.write('Duration: {0}\n'.format(duration))
     return duration
 
 
