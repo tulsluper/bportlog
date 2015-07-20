@@ -45,7 +45,7 @@ def multiwalk(function, arguments, processes):
         sys.stdout.write('Data collection progress: {}/{} {:<20}\r'.format(acc, argsnum, system))
         sys.stdout.flush()
         results.append(result)
-    sys.stdout.write('Data collection finished: {}/{} {:<25}\n'.format(acc, argsnum, ''))
+    sys.stdout.write('Data collection finished: {}/{} {:<25}\n'.format(acc, argsnum, ' '))
     return results
 
 
