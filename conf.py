@@ -1,6 +1,12 @@
+"""
+config file for bportlog scripts
+"""
+
 import os
 
-PROCESSES = 4
+
+PROCESSES = 4 # number of processes for multiprocessing
+
 DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), 'data'))
 TEMP_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), 'temp'))
 

@@ -22,7 +22,7 @@ def getlogs(systems=None, dirpath=conf.DATA_DIR):
 
 def main():
 
-    parser = argparse.ArgumentParser(description='Brocade portlogdump analysis\nExplore data',
+    parser = argparse.ArgumentParser(description='Brocade portlogdump collector and analyzer\nExplore data',
                                      formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('-p', metavar='parser',
                         choices=('stat', 'task', 'port'), default='stat',

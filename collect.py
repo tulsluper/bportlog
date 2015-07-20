@@ -144,7 +144,7 @@ def main():
 
     preparedirs(COMMANDS)
 
-    parser = argparse.ArgumentParser(description='Brocade portlogdump analysis\nCollect data',
+    parser = argparse.ArgumentParser(description='Brocade portlogdump collector and analyzer\nCollect data',
                                      formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('-r', type=int, default=1, help='repeat R times (default: 1)')
     parser.add_argument('-i', type=int, default=300, help='set I seconds interval between repeats (default:300)')

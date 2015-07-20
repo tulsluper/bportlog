@@ -1,5 +1,5 @@
 # bportlog
-Brocade portlogdump analysis
+Brocade portlogdump collector and analyzer
 <br><br><br>
 
 Clone the repo or download the latest release and unpack to bportlog.
