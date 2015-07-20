@@ -100,21 +100,21 @@ def saveouts(records, dirpath, lastlines, dtnow):
             lastlines[system] = lines[-1]
 
         acc +=1
-        sys.stdout.write('Data save progress: {}/{} {:<20}\r'.format(acc, argsnum, system))
+        sys.stdout.write('Data save progress: {0}/{1} {2:<20}\r'.format(acc, argsnum, system))
         sys.stdout.flush()
 
-    sys.stdout.write('Data save finished: {}/{} {:<25}\n'.format(acc, argsnum, ''))
+    sys.stdout.write('Data save finished: {0}/{1} {2:<25}\n'.format(acc, argsnum, ''))
     return lastlines
 
 
 def run_timer(seconds):
    timeout = seconds
    while seconds:
-       sys.stdout.write('Timeout: {:<10}\r'.format(seconds))
+       sys.stdout.write('Timeout: {0:<10}\r'.format(seconds))
        sys.stdout.flush()
        sleep(1)
        seconds -= 1
-   sys.stdout.write('Timeout: {}\n'.format(timeout))
+   sys.stdout.write('Timeout: {0}\n'.format(timeout))
 
 
 def run():
