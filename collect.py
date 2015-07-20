@@ -42,10 +42,10 @@ def multiwalk(function, arguments, processes):
     for result in pool.imap_unordered(function, arguments):
         acc +=1
         system = result[0]
-        sys.stdout.write('Data collection progress: {}/{} {:<20}\r'.format(acc, argsnum, system))
+        sys.stdout.write('Data collection progress: {0}/{1} {2:<20}\r'.format(acc, argsnum, system))
         sys.stdout.flush()
         results.append(result)
-    sys.stdout.write('Data collection finished: {}/{} {:<25}\n'.format(acc, argsnum, ' '))
+    sys.stdout.write('Data collection finished: {0}/{1} {2:<25}\n'.format(acc, argsnum, ' '))
     return results
 
 
