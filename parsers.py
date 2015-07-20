@@ -117,10 +117,10 @@ def stat(logs):
     systems = list(allnums)
     systems = sortsystems(systems)
 
-    sys.stderr.write("\n{:<17}{:<11}{:<13}{:<25}{:<25}\n".format('', 'lines', 'duration', 'from', 'till'))
+    sys.stderr.write("\n{0:<17}{1:<11}{2:<13}{3:<25}{4:<25}\n".format('', 'lines', 'duration', 'from', 'till'))
     for system in systems:
         items = [system] + allnums[system]
-        sys.stderr.write("{:<17}{:<11}{:<13}{:<25}{:<25}\n".format(*items))
+        sys.stderr.write("{0:<17}{1:<11}{2:<13}{3:<25}{4:<25}\n".format(*items))
     sys.stderr.write('\n')
 
 
