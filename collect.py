@@ -28,7 +28,7 @@ def ssh_run(system, address, username, password, commands):
             errs[name] = err.decode("utf-8") if type(out) == bytes else err
     except Exception as e:
         exception = e
-        sys.stdout.write(exception)
+        sys.stdout.write(str(exception))
     finally:
         client.close()
     return system, outs, errs, exception
