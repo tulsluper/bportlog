@@ -5,11 +5,26 @@ import sys
 import json
 import shutil
 import argparse
+import gc
 from time import time, sleep
 from datetime import datetime, timedelta
 from multiprocessing import Pool
 from paramiko import SSHClient, AutoAddPolicy
 from conf import ARGUMENTS, COMMANDS, CONNECTIONS, PROCESSES, DATA_DIR, TEMP_DIR
+
+
+def preparedirs(COMMANDS):
+    if os.path.exists(TEMP_DIR):
+        shutil.rmtree(TEMP_DIR)
+    if os.path.exists(DATA_DIR):
+        shutil.rmtree(DATA_DIR)
+    if not os.path.exists(TEMP_DIR):
+        os.makedirs(TEMP_DIR)
+    for name, command in COMMANDS:
+        dirpath = os.path.join(DATA_DIR, name)
+        if not os.path.exists(dirpath):
+            os.makedirs(dirpath)
+    return
 
 
 def ssh_run(system, address, username, password, commands):
@@ -49,22 +64,9 @@ def multiwalk(function, arguments, processes):
         sys.stdout.flush()
         results.append(result)
     pool.close()
+    pool.join()
     sys.stdout.write('Data collection finished: {0}/{1} {2:<25}\n'.format(acc, argsnum, ' '))
     return results
-
-
-def preparedirs(COMMANDS):
-    if os.path.exists(TEMP_DIR):
-        shutil.rmtree(TEMP_DIR)
-    if os.path.exists(DATA_DIR):
-        shutil.rmtree(DATA_DIR)
-    if not os.path.exists(TEMP_DIR):
-        os.makedirs(TEMP_DIR)
-    for name, command in COMMANDS:
-        dirpath = os.path.join(DATA_DIR, name)
-        if not os.path.exists(dirpath):
-            os.makedirs(dirpath)
-    return
 
 
 def prepare(lines, lastline, dtnow):
@@ -113,13 +115,15 @@ def saveouts(records, dirpath, lastlines, dtnow):
 
 
 def run_timer(seconds):
-   timeout = seconds
-   while seconds:
-       sys.stdout.write('Timeout: {0:<10}\r'.format(seconds))
-       sys.stdout.flush()
-       sleep(1)
-       seconds -= 1
-   sys.stdout.write('Timeout: {0}\n'.format(timeout))
+   if seconds > 0:
+       timeout = seconds
+       while seconds:
+           sys.stdout.write('Timeout: {0:<10}\r'.format(seconds))
+           sys.stdout.flush()
+           sleep(1)
+           seconds -= 1
+       sys.stdout.write('Timeout: {0}\n'.format(timeout))
+   return
 
 
 def run():
@@ -159,10 +163,10 @@ def main():
     repeat = args.r
     while repeat:
         duration = run()
-        timeout = interval - duration if interval > duration else 10
         repeat -= 1
         if repeat:
-            run_timer(timeout)
+            run_timer(interval-duration)
+            gc.collect()
 
 
 if __name__ == '__main__':
