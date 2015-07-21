@@ -28,6 +28,7 @@ def ssh_run(system, address, username, password, commands):
             errs[name] = err.decode("utf-8") if type(out) == bytes else err
     except Exception as e:
         exception = e
+        sys.stdout.write(exception)
     finally:
         client.close()
     return system, outs, errs, exception
@@ -91,15 +92,16 @@ def saveouts(records, dirpath, lastlines, dtnow):
     argsnum = len(records)
     acc = 0
     for system, outs, errs, exception in records:
-        lastline = lastlines.get(system, None)
-        lines = outs['portlogdump'].split('\n')
-        lines = prepare(lines, lastline, dtnow)
-        filepath = os.path.join(dirpath, 'portlogdump/%s.txt' %system)
-        if lines:
-            with open(filepath, 'a') as f:
-                f.write('\n'.join(lines)+'\n')
-        if lines:
-            lastlines[system] = lines[-1]
+        if not exception:
+            lastline = lastlines.get(system, None)
+            lines = outs['portlogdump'].split('\n')
+            lines = prepare(lines, lastline, dtnow)
+            filepath = os.path.join(dirpath, 'portlogdump/%s.txt' %system)
+            if lines:
+                with open(filepath, 'a') as f:
+                    f.write('\n'.join(lines)+'\n')
+            if lines:
+                lastlines[system] = lines[-1]
 
         acc +=1
         sys.stdout.write('Data save progress: {0}/{1} {2:<20}\r'.format(acc, argsnum, system))
