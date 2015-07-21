@@ -5,7 +5,6 @@ import sys
 import json
 import shutil
 import argparse
-import gc
 from time import time, sleep
 from datetime import datetime, timedelta
 from multiprocessing import Pool
@@ -127,15 +126,13 @@ def run_timer(seconds):
 
 
 def run():
-    starttime = time()
     dtnow = datetime.now()
 
+    lastlines = {}
     filepath = os.path.join(TEMP_DIR, 'portlogdump.json')
     if os.path.isfile(filepath):
         with open(filepath) as f:
             lastlines = json.load(f)
-    else:
-        lastlines = {}
 
     records = multiwalk(ssh_run_wrap, ARGUMENTS, PROCESSES)
     lastlines = saveouts(records, DATA_DIR, lastlines, dtnow)
@@ -144,12 +141,11 @@ def run():
     with open(filepath, 'w') as f:
         json.dump(lastlines, f)
 
-    duration = int(time() - starttime)
-    sys.stdout.write('Duration: {0}\n'.format(duration))
+    # garbage collection
+    del records
+    del lastlines
 
-    gc.collect()
-
-    return duration
+    return
 
 
 def main():
@@ -165,10 +161,13 @@ def main():
     interval = args.i
     repeat = args.r
     while repeat:
-        duration = run()
+        starttime = time()
+        run()
+        duration = time() - starttime
+        sys.stdout.write('Duration: {0}\n'.format(duration))
         repeat -= 1
         if repeat:
-            run_timer(interval-duration)
+            run_timer(interval-int(duration))
 
 
 if __name__ == '__main__':
