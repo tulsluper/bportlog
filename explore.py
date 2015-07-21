@@ -1,13 +1,33 @@
 #!/usr/bin/env python
 
 import os
+import sys
 import argparse
+import tarfile
+import tempfile
 from datetime import datetime
-import conf
+
+from conf import DATA_DIR
 import parsers
 
 
-def getlogs(systems=None, dirpath=conf.DATA_DIR):
+def exarch(filepath):
+    if not os.path.exists(filepath):
+        sys.stderr.write('path not found\n')
+        sys.exit(1)
+    if os.path.isdir(filepath):
+        sys.stderr.write('specify file, not directory\n')
+        sys.exit(1)
+    if not tarfile.is_tarfile(filepath):
+        sys.stderr.write('file is not tar archive\n')
+        sys.exit(1)
+    with tarfile.open(filepath) as tar:
+        tempdirpath = tempfile.mkdtemp()
+        tar.extractall(tempdirpath)
+    return tempdirpath
+
+
+def getlogs(dirpath, systems=None):
     logs = {}
     logdirpath = os.path.join(dirpath, 'portlogdump')
     for filename in os.listdir(logdirpath):
@@ -36,12 +56,17 @@ port - records percentage for for each port\n\
     parser.add_argument('-s', metavar='system',
                         nargs='+',
                         help='execute for specified system(s) or all')
+    parser.add_argument('-a', metavar='archive',
+                        help='get data from archive file')
     args = parser.parse_args()
 
-    logs = getlogs(args.s)
+
+    dirpath = exarch(args.a) if args.a else DATA_DIR
+    logs = getlogs(dirpath, args.s)
     function = getattr(parsers, args.p)
-    result = function(logs)
-    pass
+    function(logs)
+
+    return
 
 if __name__ == '__main__':
     main()

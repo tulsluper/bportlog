@@ -43,21 +43,21 @@ def task(logs):
     systems = list(allnums.keys())
     systems = sortsystems(systems)
 
-    sys.stderr.write('')
+    sys.stdout.write('')
     for keyspart in itemstoparts(keys, 12):
         
-        sys.stderr.write('\n')
-        sys.stderr.write('{0} {1}\n'.format(' '*12, ''.join(['{0:>6}'.format(n.split()[0]) for n in keyspart])))
-        sys.stderr.write('{0} {1}\n'.format(' '*12, ''.join(['{0:>6}'.format(n.split()[1]) for n in keyspart])))
+        sys.stdout.write('\n')
+        sys.stdout.write('{0} {1}\n'.format(' '*12, ''.join(['{0:>6}'.format(n.split()[0]) for n in keyspart])))
+        sys.stdout.write('{0} {1}\n'.format(' '*12, ''.join(['{0:>6}'.format(n.split()[1]) for n in keyspart])))
 
         for system in systems:
             items = []
             for key in keyspart:
                 num = allnums[system].get(key, '')
                 items.append(num)
-            sys.stderr.write('{0:<12} {1}\n'.format(system, ''.join(['{0:>6}'.format(i) for i in items])))
-        sys.stderr.write('')
-    sys.stderr.write('\n')
+            sys.stdout.write('{0:<12} {1}\n'.format(system, ''.join(['{0:>6}'.format(i) for i in items])))
+        sys.stdout.write('')
+    sys.stdout.write('\n')
 
 #===============================================================================
 
@@ -81,7 +81,7 @@ def port(logs):
 
         allnums[system] = nums
 
-    sys.stderr.write('')
+    sys.stdout.write('')
 
     systems = list(allnums)
     systems = sortsystems(systems)
@@ -90,10 +90,10 @@ def port(logs):
         nums = list(allnums[system].items())
         nums.sort(key=lambda x: x[1], reverse=True)
 
-        sys.stderr.write('\n')
+        sys.stdout.write('\n')
         for numspart in itemstoparts(nums, 8):
-            sys.stderr.write('{0:<14} {1}\n'.format(system, '  '. join(['{0:>3}:{1:>3}'.format(p, v) for p, v in numspart])))
-    sys.stderr.write('\n')
+            sys.stdout.write('{0:<14} {1}\n'.format(system, '  '. join(['{0:>3}:{1:>3}'.format(p, v) for p, v in numspart])))
+    sys.stdout.write('\n')
 
 #===============================================================================
 
@@ -117,10 +117,10 @@ def stat(logs):
     systems = list(allnums)
     systems = sortsystems(systems)
 
-    sys.stderr.write("\n{0:<17}{1:<11}{2:<13}{3:<25}{4:<25}\n".format('', 'lines', 'duration', 'from', 'till'))
+    sys.stdout.write("\n{0:<17}{1:<11}{2:<13}{3:<25}{4:<25}\n".format('', 'lines', 'duration', 'from', 'till'))
     for system in systems:
         items = [system] + allnums[system]
-        sys.stderr.write("{0:<17}{1:<11}{2:<13}{3:<25}{4:<25}\n".format(*items))
-    sys.stderr.write('\n')
+        sys.stdout.write("{0:<17}{1:<11}{2:<13}{3:<25}{4:<25}\n".format(*items))
+    sys.stdout.write('\n')
 
 
