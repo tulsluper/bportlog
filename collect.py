@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import os
 import sys
@@ -22,8 +22,10 @@ def ssh_run(system, address, username, password, commands):
         client.connect(address, port=port, username=username, password=password)
         for name, command in commands:
             stdin, stdout, stderr = client.exec_command(command)
-            outs[name] = stdout.read().decode("utf-8")
-            errs[name] = stderr.read().decode("utf-8")
+            out = stdout.read()
+            err = stderr.read()
+            outs[name] = out.decode("utf-8") if type(out) == bytes else out
+            errs[name] = err.decode("utf-8") if type(out) == bytes else err
     except Exception as e:
         exception = e
     finally:
