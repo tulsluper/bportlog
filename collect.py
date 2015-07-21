@@ -146,6 +146,9 @@ def run():
 
     duration = int(time() - starttime)
     sys.stdout.write('Duration: {0}\n'.format(duration))
+
+    gc.collect()
+
     return duration
 
 
@@ -166,7 +169,6 @@ def main():
         repeat -= 1
         if repeat:
             run_timer(interval-duration)
-            gc.collect()
 
 
 if __name__ == '__main__':
