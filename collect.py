@@ -29,7 +29,6 @@ def ssh_run(system, address, username, password, commands):
     except Exception as e:
         exception = e
         sys.stdout.write('{0} - {1:<25}'.format(system, exception))
-i
     finally:
         client.close()
     return system, outs, errs, exception
