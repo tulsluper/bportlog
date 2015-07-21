@@ -28,7 +28,7 @@ def ssh_run(system, address, username, password, commands):
             errs[name] = err.decode("utf-8") if type(out) == bytes else err
     except Exception as e:
         exception = e
-        sys.stdout.write('{0} - {1:<25}'.format(system, exception))
+        sys.stdout.write('{0} - {1:<40}\n'.format(system, exception))
     finally:
         client.close()
     return system, outs, errs, exception
@@ -48,6 +48,7 @@ def multiwalk(function, arguments, processes):
         sys.stdout.write('Data collection progress: {0}/{1} {2:<20}\r'.format(acc, argsnum, system))
         sys.stdout.flush()
         results.append(result)
+    pool.close()
     sys.stdout.write('Data collection finished: {0}/{1} {2:<25}\n'.format(acc, argsnum, ' '))
     return results
 
