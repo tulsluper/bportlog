@@ -117,7 +117,8 @@ def stat(logs):
     systems = list(allnums)
     systems = sortsystems(systems)
 
-    sys.stdout.write("\n{0:<17}{1:<11}{2:<13}{3:<25}{4:<25}\n".format('', 'lines', 'duration', 'from', 'till'))
+    if systems:
+        sys.stdout.write("\n{0:<17}{1:<11}{2:<13}{3:<25}{4:<25}\n".format('', 'lines', 'duration', 'from', 'till'))
     for system in systems:
         items = [system] + allnums[system]
         sys.stdout.write("{0:<17}{1:<11}{2:<13}{3:<25}{4:<25}\n".format(*items))
