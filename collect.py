@@ -163,11 +163,11 @@ def main():
     while repeat:
         starttime = time()
         run()
-        duration = time() - starttime
+        duration = int(time() - starttime)
         sys.stdout.write('Duration: {0}\n'.format(duration))
         repeat -= 1
         if repeat:
-            run_timer(interval-int(duration))
+            run_timer(interval-duration)
 
 
 if __name__ == '__main__':
