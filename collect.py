@@ -26,7 +26,8 @@ def preparedirs(COMMANDS):
     return
 
 
-def ssh_run(system, address, username, password, commands):
+def ssh_run(args):
+    system, address, username, password, commands = args
     address, port = address.split(':') if ':' in address else address, 22
     outs, errs, exception = {}, {}, None
     try:
@@ -47,9 +48,6 @@ def ssh_run(system, address, username, password, commands):
         client.close()
     return system, outs, errs, exception
 
-def ssh_run_wrap(args):
-    return ssh_run(*args)
-
 
 def multiwalk(function, arguments, processes):
     argsnum = len(arguments)
@@ -66,7 +64,6 @@ def multiwalk(function, arguments, processes):
     pool.join()
     sys.stdout.write('Data collection finished: {0}/{1} {2:<25}\n'.format(acc, argsnum, ' '))
     return results
-
 
 def prepare(lines, lastline, dtnow, dtprev):
     newlines = []
@@ -114,6 +111,10 @@ def saveouts(records, dirpath, lastlines, dtnow, dtprev):
         sys.stdout.flush()
 
     sys.stdout.write('Data save finished: {0}/{1} {2:<25}\n'.format(acc, argsnum, ''))
+
+    # garbage collection
+    del lines
+
     return lastlines
 
 
@@ -141,7 +142,7 @@ def run(interval):
         with open(filepath) as f:
             lastlines = json.load(f)
 
-    records = multiwalk(ssh_run_wrap, ARGUMENTS, PROCESSES)
+    records = multiwalk(ssh_run, ARGUMENTS, PROCESSES)
     lastlines = saveouts(records, DATA_DIR, lastlines, dtnow, dtprev)
 
     filepath = os.path.join(TEMP_DIR, 'portlogdump.json')
@@ -179,5 +180,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-
 

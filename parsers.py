@@ -8,7 +8,6 @@ from collections import defaultdict
 def sortsystems(systems, records=conf.CONNECTIONS):
     sortdict = {}
     for index, record in enumerate(reversed(records)):
-        print(index, record)
         name = record[0]
         sortdict[name] = index 
     systems.sort(key=lambda x: sortdict.get(x, -1), reverse=True)
