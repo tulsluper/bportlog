@@ -88,7 +88,7 @@ def p_time(logs):
         dts_keys = sorted(dts.keys())
         min_dt = datetime.strptime(min(dts_keys), "%Y-%m-%dT%H:%M") 
         max_dt = datetime.strptime(max(dts_keys), "%Y-%m-%dT%H:%M")
-        for m in range((max_dt-min_dt).seconds/60+1):
+        for m in range(int((max_dt-min_dt).seconds)/60+1):
             dt = min_dt +timedelta(minutes=m)
             dtstr = dt.isoformat()[:16]
             tasks = dts.get(dtstr, {})
