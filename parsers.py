@@ -1,6 +1,7 @@
 import sys
 import conf
-from datetime import datetime
+from datetime import datetime, timedelta
+from collections import defaultdict
 
 #===============================================================================
 
@@ -19,7 +20,91 @@ def itemstoparts(items, length):
 
 #===============================================================================
 
-def task(logs):
+
+def p_xtime(logs):
+
+    dicttree = lambda: defaultdict(dicttree)
+    out = dicttree()
+    utasks = set()
+    for system, lines in logs.items():
+        for line in lines:
+            if line[46] == ' ':
+                items = line.strip().split()
+                minute = items[0][:16]
+                task = ' '.join(items[1:3])
+                port = items[3]
+                count = out[system][minute][port].get(task, 0)
+                out[system][minute][port][task] = count + 1
+                utasks.add(task)
+
+    utasks = sorted(utasks)
+
+    for systems, s_values in out.items():
+        sys.stdout.write(system)
+        for minute, m_values in s_values.items():
+            sys.stdout.write('{0}{1}\n'.format('{0:>16}'.format(''), ''.join(['{0:>6}'.format(task.split()[0]) for task in utasks])))
+            sys.stdout.write('{0}{1}\n'.format('{0:>16}'.format(''), ''.join(['{0:>6}'.format(task.split()[1]) for task in utasks])))
+            for port, p_values in m_values.items():
+                sys.stdout.write('{0}{1}\n'.format('{0:>16}'.format(port), ''.join(['{0:>6}'.format(p_values.get(task, '-')) for task in utasks])))
+                     
+
+#    ukeys = [x3.keys() for x1 in out.values() for x2 in x1.values() for x3 in x2.values()]
+#    print(set(sum(ukeys, [])))
+
+
+
+
+def p_time(logs):
+
+    alldts = {}
+    for system, lines in logs.items():
+        dts = {}
+
+        for line in lines:
+            items = line.strip().split()
+            dtstr = items[0][:16]
+            task = ' '.join(items[1:3])
+            if not dtstr in dts:
+                dts[dtstr] = {}
+            if not task in dts[dtstr]:
+                dts[dtstr][task] = 0
+            dts[dtstr][task] += 1
+        alldts[system] = dts
+
+
+    ukeys = [list(x.keys()) for dts in alldts.values() for x in dts.values()]
+    ukeys = sorted(set(sum(ukeys, [])))
+
+    for system, dts in alldts.items():
+
+#        ukeys = [list(x.keys()) for x in dts.values()]
+#        ukeys = sorted(set(sum(ukeys, [])))
+
+        sys.stdout.write('\n{0}\n'.format(system))
+        sys.stdout.write('{0}{1}\n'.format(' '*16, ''.join(['{0:>6}'.format(n.split()[0]) for n in ukeys])))
+        sys.stdout.write('{0}{1}\n'.format(' '*16, ''.join(['{0:>6}'.format(n.split()[1]) for n in ukeys])))
+        sys.stdout.write('\n')
+
+        dts_keys = sorted(dts.keys())
+        min_dt = datetime.strptime(min(dts_keys), "%Y-%m-%dT%H:%M") 
+        max_dt = datetime.strptime(max(dts_keys), "%Y-%m-%dT%H:%M")
+        for m in range((max_dt-min_dt).seconds/60+1):
+            dt = min_dt +timedelta(minutes=m)
+            dtstr = dt.isoformat()[:16]
+            tasks = dts.get(dtstr, {})
+            dtstr = dtstr.replace('T',' ')
+
+            items = [tasks.get(k, '') for k in ukeys]
+
+            sys.stdout.write('{0:<16}{1}\n'.format(dtstr, ''.join(['{0:>6}'.format(i) for i in items])))
+
+
+
+#            dt = datetime.strptime(items[0], "%Y-%m-%dT%H:%M:%S.%f")
+#            print(dt)
+
+
+def p_task(logs):
 
     allnums = {}
     for system, lines in logs.items():
@@ -61,7 +146,7 @@ def task(logs):
 
 #===============================================================================
 
-def port(logs):
+def p_port(logs):
 
     allnums = {}
     for system, lines in logs.items():
@@ -69,7 +154,7 @@ def port(logs):
         nums = {}
 
         for line in lines:
-            if line[42] == ' ':
+            if line[46] == ' ':
                 items = line.strip().split()
                 key = items[3]
                 if not key in nums:
@@ -98,7 +183,7 @@ def port(logs):
 #===============================================================================
 
 
-def stat(logs):
+def p_stat(logs):
 
     allnums = {}
     for system, lines in logs.items():

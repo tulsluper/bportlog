@@ -68,18 +68,22 @@ def multiwalk(function, arguments, processes):
     return results
 
 
-def prepare(lines, lastline, dtnow):
+def prepare(lines, lastline, dtnow, dtprev):
     newlines = []
-    dtmin = dtnow - timedelta(minutes=5)
     for line in lines[2:-1]:
         if line[3] == ' ':
            date = datetime.strptime(line, '%c').date()
         else:
            time = datetime.strptime(line[:12], '%H:%M:%S.%f').time()
            dt = datetime.combine(date, time)
-           if lastline or dtmin < dt < dtnow:
-               newline = '{0} {1}'.format(dt.isoformat()[:19], line[13:])
-               newlines.append(newline)
+           if lastline or dtprev < dt:
+               if dt < dtnow:
+                   dtstr = dt.isoformat()[:23]
+                   x = 23-len(dtstr)
+                   if x:
+                       dtstr += '.000'[-x:]
+                   newline = '{0} {1}'.format(dtstr, line[13:])
+                   newlines.append(newline)
     try:
         if lastline != newlines[-1]:
             index = newlines.index(lastline)
@@ -90,14 +94,14 @@ def prepare(lines, lastline, dtnow):
     return newlines
 
 
-def saveouts(records, dirpath, lastlines, dtnow):
+def saveouts(records, dirpath, lastlines, dtnow, dtprev):
     argsnum = len(records)
     acc = 0
     for system, outs, errs, exception in records:
         if not exception:
             lastline = lastlines.get(system, None)
             lines = outs['portlogdump'].split('\n')
-            lines = prepare(lines, lastline, dtnow)
+            lines = prepare(lines, lastline, dtnow, dtprev)
             filepath = os.path.join(dirpath, 'portlogdump/%s.txt' %system)
             if lines:
                 with open(filepath, 'a') as f:
@@ -125,8 +129,11 @@ def run_timer(seconds):
    return
 
 
-def run():
+def run(interval):
     dtnow = datetime.now()
+    dtnow = dtnow.replace(second=0, microsecond=0)
+    dtprev = dtnow - timedelta(seconds=interval)
+    dtnow = dtnow - timedelta(microseconds=1)
 
     lastlines = {}
     filepath = os.path.join(TEMP_DIR, 'portlogdump.json')
@@ -135,7 +142,7 @@ def run():
             lastlines = json.load(f)
 
     records = multiwalk(ssh_run_wrap, ARGUMENTS, PROCESSES)
-    lastlines = saveouts(records, DATA_DIR, lastlines, dtnow)
+    lastlines = saveouts(records, DATA_DIR, lastlines, dtnow, dtprev)
 
     filepath = os.path.join(TEMP_DIR, 'portlogdump.json')
     with open(filepath, 'w') as f:
@@ -162,7 +169,7 @@ def main():
     repeat = args.r
     while repeat:
         starttime = time()
-        run()
+        run(interval)
         duration = int(time() - starttime)
         sys.stdout.write('Duration: {0}\n'.format(duration))
         repeat -= 1

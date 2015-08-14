@@ -45,12 +45,13 @@ def main():
     parser = argparse.ArgumentParser(description='Brocade portlogdump collector and analyzer\nExplore data',
                                      formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('-p', metavar='parser',
-                        choices=('stat', 'task', 'port'), default='stat',
+                        choices=('stat', 'task', 'port', 'time', 'xtime'), default='stat',
                         help="\
 execute parser function:\n\
 stat - records base statistic\n\
 task - records percentage for each task event\n\
-port - records percentage for for each port\n\
+port - records percentage for each port\n\
+time - records percentage for each minute\n\
 (default: stat)")
 
     parser.add_argument('-s', metavar='system',
@@ -63,7 +64,7 @@ port - records percentage for for each port\n\
 
     dirpath = exarch(args.a) if args.a else DATA_DIR
     logs = getlogs(dirpath, args.s)
-    function = getattr(parsers, args.p)
+    function = getattr(parsers, 'p_%s' %args.p)
     function(logs)
 
     return
