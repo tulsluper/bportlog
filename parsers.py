@@ -88,7 +88,7 @@ def p_time(logs):
         dts_keys = sorted(dts.keys())
         min_dt = datetime.strptime(min(dts_keys), "%Y-%m-%dT%H:%M") 
         max_dt = datetime.strptime(max(dts_keys), "%Y-%m-%dT%H:%M")
-        for m in range(int((max_dt-min_dt).seconds)/60+1):
+        for m in range(int((max_dt-min_dt).seconds/60+1)):
             dt = min_dt +timedelta(minutes=m)
             dtstr = dt.isoformat()[:16]
             tasks = dts.get(dtstr, {})
@@ -128,20 +128,16 @@ def p_task(logs):
     systems = list(allnums.keys())
     systems = sortsystems(systems)
 
-    sys.stdout.write('')
-    for keyspart in itemstoparts(keys, 12):
-        
-        sys.stdout.write('\n')
-        sys.stdout.write('{0} {1}\n'.format(' '*12, ''.join(['{0:>6}'.format(n.split()[0]) for n in keyspart])))
-        sys.stdout.write('{0} {1}\n'.format(' '*12, ''.join(['{0:>6}'.format(n.split()[1]) for n in keyspart])))
+    sys.stdout.write('\n')
+    sys.stdout.write('{0} {1}\n'.format(' '*12, ''.join(['{0:>6}'.format(n.split()[0]) for n in keys])))
+    sys.stdout.write('{0} {1}\n'.format(' '*12, ''.join(['{0:>6}'.format(n.split()[1]) for n in keys])))
 
-        for system in systems:
-            items = []
-            for key in keyspart:
-                num = allnums[system].get(key, '')
-                items.append(num)
-            sys.stdout.write('{0:<12} {1}\n'.format(system, ''.join(['{0:>6}'.format(i) for i in items])))
-        sys.stdout.write('')
+    for system in systems:
+        items = []
+        for key in keys:
+            num = allnums[system].get(key, '')
+            items.append(num)
+        sys.stdout.write('{0:<12} {1}\n'.format(system, ''.join(['{0:>6}'.format(i) for i in items])))
     sys.stdout.write('\n')
 
 #===============================================================================
