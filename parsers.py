@@ -8,6 +8,7 @@ from collections import defaultdict
 def sortsystems(systems, records=conf.CONNECTIONS):
     sortdict = {}
     for index, record in enumerate(reversed(records)):
+        print(index, record)
         name = record[0]
         sortdict[name] = index 
     systems.sort(key=lambda x: sortdict.get(x, -1), reverse=True)
@@ -75,10 +76,11 @@ def p_time(logs):
     ukeys = [list(x.keys()) for dts in alldts.values() for x in dts.values()]
     ukeys = sorted(set(sum(ukeys, [])))
 
-    for system, dts in alldts.items():
+    systems = list(alldts.keys())
+    systems = sortsystems(systems)
 
-#        ukeys = [list(x.keys()) for x in dts.values()]
-#        ukeys = sorted(set(sum(ukeys, [])))
+    for system in systems:
+        dts = alldts.get(system, {})
 
         sys.stdout.write('\n{0}\n'.format(system))
         sys.stdout.write('{0}{1}\n'.format(' '*16, ''.join(['{0:>6}'.format(n.split()[0]) for n in ukeys])))
